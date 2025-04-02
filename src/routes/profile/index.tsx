@@ -1,327 +1,510 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger
+} from "@/components/ui/tabs";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    GridIcon,
-    PlayCircleIcon,
-    ImageIcon,
-    UserIcon,
-    CameraIcon,
-    BookmarkIcon,
-    MessageCircleIcon,
-    Share2Icon,
-    ListIcon,
-    CalendarIcon
+    CalendarDays,
+    Link as LinkIcon,
+    MapPin,
+    MessageCircle,
+    Heart,
+    Repeat2,
+    Share2,
+    MoreHorizontal,
+    Briefcase,
+    Mail,
+    Twitter,
+    Github,
+    Shield
 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
+import {Sidebar} from "@/components/Sidebar.tsx";
 
 export const Route = createFileRoute('/profile/')({
-    component: ProfilePage,
+    component: UserProfilePage,
 })
 
-// Types
-type MediaType = "image" | "video";
 
-type MediaItem = {
-    id: string;
-    type: MediaType;
-    url: string;
-    thumbnail?: string;
-    title: string;
-    description?: string;
-    likes: number;
-    comments: number;
-    createdAt: string;
-};
-
+// Profile data type
 type ProfileData = {
-    id: string;
-    username: string;
-    name: string;
-    avatar: string;
-    bio: string;
-    location: string;
-    specialties: string[];
-    followers: number;
-    following: number;
-    mediaCount: number;
-    media: MediaItem[];
+    user: {
+        name: string;
+        username: string;
+        avatarUrl?: string;
+        headerImageUrl?: string;
+        initials: string;
+        bio: string;
+        location: string;
+        website: string;
+        joinDate: string;
+        isVerified: boolean;
+        workInfo: string;
+        contact: string;
+        stats: {
+            posts: number;
+            followers: number;
+            following: number;
+            likes: number;
+        };
+        github?: string;
+        twitter?: string;
+        badges: Array<{
+            id: string;
+            name: string;
+            icon: string;
+        }>;
+    };
+    posts: Array<{
+        id: string;
+        content: string;
+        mediaUrl?: string;
+        timestamp: string;
+        stats: {
+            likes: number;
+            comments: number;
+            reposts: number;
+        };
+    }>;
 };
 
-// Mock API function
+// Mock data fetch function
 const fetchProfileData = async (): Promise<ProfileData> => {
-    // In a real app, this would be an API call
+    // This would be an API call in a real app
     return {
-        id: "user123",
-        username: "empusaau",
-        name: "Empusa",
-        avatar: "/avatar.jpg",
-        bio: "Professional photographer and videographer specializing in documentary and street photography. Available for collaborations and projects.",
-        location: "New York, NY",
-        specialties: ["Photography", "Videography", "Documentary", "Street"],
-        followers: 2547,
-        following: 348,
-        mediaCount: 142,
-        media: Array(20).fill(null).map((_, i) => ({
-            id: `media-${i}`,
-            type: i % 3 === 0 ? "video" : "image",
-            url: `https://picsum.photos/seed/${i}/275/275`,
-            thumbnail: i % 3 === 0 ? `https://picsum.photos/seed/${i}/275/275` : undefined,
-            title: `Project ${i + 1}`,
-            description: i % 2 === 0 ? "A creative project exploring urban landscapes and human interaction." : undefined,
-            likes: Math.floor(Math.random() * 200) + 50,
-            comments: Math.floor(Math.random() * 30) + 5,
-            createdAt: new Date(Date.now() - (i * 86400000)).toISOString(),
-        })),
+        user: {
+            name: "Ryan Chen",
+            username: "ryanchen",
+            initials: "RC",
+            headerImageUrl: "https://picsum.photos/seed/avatar/1200/300",
+            avatarUrl: "https://picsum.photos/seed/avatar/400/400",
+            bio: "Senior Frontend Engineer | TypeScript enthusiast | Building user-friendly interfaces with React & modern web tech | Open source contributor",
+            location: "San Francisco, CA",
+            website: "ryanchen.dev",
+            joinDate: "Joined March 2019",
+            isVerified: true,
+            workInfo: "Frontend Lead at TechSolutions Inc.",
+            contact: "ryan@techsolutions.com",
+            stats: {
+                posts: 482,
+                followers: 8754,
+                following: 325,
+                likes: 2103
+            },
+            github: "github.com/ryanchendev",
+            twitter: "twitter.com/ryanchendev",
+            badges: [
+                {
+                    id: "1",
+                    name: "Certified React Developer",
+                    icon: "🏆"
+                },
+                {
+                    id: "2",
+                    name: "Open Source Contributor",
+                    icon: "⭐"
+                },
+                {
+                    id: "3",
+                    name: "TypeScript Expert",
+                    icon: "🔷"
+                }
+            ]
+        },
+        posts: [
+            {
+                id: "1",
+                content: "Just released my new open-source React hooks library! Check it out at github.com/ryanchendev/react-power-hooks. It includes performance-optimized state management solutions and accessibility-enhanced interaction hooks. #React #OpenSource #WebDev",
+                timestamp: "2h ago",
+                stats: {
+                    likes: 243,
+                    comments: 42,
+                    reposts: 78
+                }
+            },
+            {
+                id: "2",
+                content: "Conference talk on 'Building Accessible Web Apps' went great today! Thanks to everyone who attended. Slides are now available on my website.",
+                mediaUrl: "https://picsum.photos/seed/picsum/600/400",
+                timestamp: "1d ago",
+                stats: {
+                    likes: 512,
+                    comments: 64,
+                    reposts: 112
+                }
+            },
+            {
+                id: "3",
+                content: "TypeScript tip of the day: Use discriminated unions for more precise type checking in your React components.\n\n```typescript\ntype Props = \n  | { variant: 'primary'; color: string }\n  | { variant: 'secondary'; backgroundColor: string };\n```\n\nThis prevents invalid prop combinations! #TypeScript #WebDevTips",
+                timestamp: "2d ago",
+                stats: {
+                    likes: 378,
+                    comments: 52,
+                    reposts: 91
+                }
+            },
+            {
+                id: "4",
+                content: "Current tech stack for our latest project:\n\n• React 18 with Suspense\n• TypeScript (strict mode)\n• TanStack Query v5\n• Zustand for state\n• Shadcn/UI + Tailwind\n• Vitest + Testing Library\n• Deployed on Vercel\n\nLoving this combo for developer experience and performance!",
+                timestamp: "3d ago",
+                stats: {
+                    likes: 427,
+                    comments: 87,
+                    reposts: 103
+                }
+            }
+        ]
     };
 };
 
-// Components
-function ProfilePage() {
-    const [activeTab, setActiveTab] = useState<"grid" | "photos" | "videos">("grid");
-    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-
-    const { data: profile, isLoading, error } = useQuery({
-        queryKey: ["profile"],
+function UserProfilePage() {
+    const {data: profileData} = useQuery({
+        queryKey: ["profileData"],
         queryFn: fetchProfileData,
+        initialData: {
+            user: {
+                name: "Ryan Chen",
+                username: "ryanchen",
+                initials: "RC",
+                headerImageUrl: "https://picsum.photos/seed/avatar/1200/300",
+                bio: "Senior Frontend Engineer | TypeScript enthusiast",
+                location: "San Francisco, CA",
+                website: "ryanchen.dev",
+                joinDate: "Joined March 2019",
+                isVerified: true,
+                workInfo: "Frontend Lead at TechSolutions Inc.",
+                contact: "ryan@techsolutions.com",
+                stats: {
+                    posts: 482,
+                    followers: 8754,
+                    following: 325,
+                    likes: 2103
+                },
+                github: "github.com/ryanchendev",
+                twitter: "twitter.com/ryanchendev",
+                badges: []
+            },
+            posts: []
+        }
     });
 
-    if (isLoading) {
-        return <div className="flex items-center justify-center h-screen">Loading profile...</div>;
-    }
-
-    if (error || !profile) {
-        return <div className="flex items-center justify-center h-screen">Error loading profile data</div>;
-    }
-
-    const filteredMedia = activeTab === "grid"
-        ? profile.media
-        : profile.media.filter(item =>
-            activeTab === "photos" ? item.type === "image" : item.type === "video"
-        );
+    const {user, posts} = profileData;
 
     return (
-        <div className="container mx-auto py-6 max-w-4xl">
-            <ProfileHeader profile={profile} />
-            <Separator className="my-6" />
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                <ProfileTabs
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
-                    photoCount={profile.media.filter(m => m.type === "image").length}
-                    videoCount={profile.media.filter(m => m.type === "video").length}
-                />
-                <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+        <div className="flex h-screen bg-white">
+            {/* Left Sidebar */}
+            <Sidebar unreadNotifications={8} />
+
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col">
+                {/* Header Image */}
+                <div className="relative h-48 bg-gray-200 overflow-hidden">
+                    {user.headerImageUrl && (
+                        <img
+                            src={user.headerImageUrl}
+                            alt="Profile header"
+                            className="w-full h-full object-cover"
+                        />
+                    )}
+                </div>
+
+                {/* Profile Info */}
+                <div className="px-6 pb-4 border-b relative">
+                    <div className="flex justify-between items-start">
+                        <div className="flex-shrink-0">
+                            <Avatar className="h-24 w-24 border-4 border-white ring-4 ring-white bg-white">
+                                {user.avatarUrl ? (
+                                    <AvatarImage src={user.avatarUrl} alt={user.name}/>
+                                ) : (
+                                    <AvatarFallback
+                                        className="text-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                                        {user.initials}
+                                    </AvatarFallback>
+                                )}
+                            </Avatar>
+                        </div>
+                        <div className="flex space-x-2 mt-10">
+                            <Button variant="outline" className="border-gray-300">
+                                <Mail className="h-4 w-4 mr-2"/>
+                                Message
+                            </Button>
+                            <Button className="bg-blue-500 hover:bg-blue-600">
+                                Follow
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div className="mt-3">
+                        <div className="flex items-center">
+                            <h1 className="text-xl font-bold">{user.name}</h1>
+                            {user.isVerified && (
+                                <span className="ml-1 text-blue-500 bg-blue-100 p-1 rounded-full inline-flex">
+                  <Shield className="h-4 w-4"/>
+                </span>
+                            )}
+                        </div>
+                        <p className="text-gray-500">@{user.username}</p>
+
+                        <div className="flex flex-wrap items-center text-sm text-gray-500 mt-3 gap-y-1">
+                            {user.workInfo && (
+                                <div className="flex items-center mr-4">
+                                    <Briefcase className="h-4 w-4 mr-1"/>
+                                    <span>{user.workInfo}</span>
+                                </div>
+                            )}
+                            {user.location && (
+                                <div className="flex items-center mr-4">
+                                    <MapPin className="h-4 w-4 mr-1"/>
+                                    <span>{user.location}</span>
+                                </div>
+                            )}
+                            {user.website && (
+                                <div className="flex items-center mr-4">
+                                    <LinkIcon className="h-4 w-4 mr-1"/>
+                                    <a href={`https://${user.website}`} className="text-blue-500 hover:underline">
+                                        {user.website}
+                                    </a>
+                                </div>
+                            )}
+                            <div className="flex items-center">
+                                <CalendarDays className="h-4 w-4 mr-1"/>
+                                <span>{user.joinDate}</span>
+                            </div>
+                        </div>
+
+                        <p className="mt-3 text-gray-800">{user.bio}</p>
+
+                        {user.badges.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                                {user.badges.map(badge => (
+                                    <span
+                                        key={badge.id}
+                                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800"
+                                    >
+                    <span className="mr-1">{badge.icon}</span>
+                                        {badge.name}
+                  </span>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="flex items-center space-x-6 mt-4">
+                            <div>
+                                <span className="font-bold">{user.stats.posts.toLocaleString()}</span>
+                                <span className="text-gray-500 ml-1">Posts</span>
+                            </div>
+                            <div>
+                                <span className="font-bold">{user.stats.followers.toLocaleString()}</span>
+                                <span className="text-gray-500 ml-1">Followers</span>
+                            </div>
+                            <div>
+                                <span className="font-bold">{user.stats.following.toLocaleString()}</span>
+                                <span className="text-gray-500 ml-1">Following</span>
+                            </div>
+                            <div>
+                                <span className="font-bold">{user.stats.likes.toLocaleString()}</span>
+                                <span className="text-gray-500 ml-1">Likes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Content Tabs */}
+                <Tabs defaultValue="posts" className="flex-1 flex flex-col">
+                    <div className="border-b">
+                        <TabsList className="bg-transparent border-b-0 rounded-none h-12">
+                            <TabsTrigger
+                                value="posts"
+                                className="data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none h-12"
+                            >
+                                Posts
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="media"
+                                className="data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none h-12"
+                            >
+                                Media
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="likes"
+                                className="data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none h-12"
+                            >
+                                Likes
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
+
+                    <TabsContent value="posts" className="flex-1 p-0 m-0">
+                        <ScrollArea className="h-full">
+                            <div className="divide-y">
+                                {posts.map((post) => (
+                                    <div key={post.id} className="p-4 hover:bg-gray-50">
+                                        <div className="flex items-start space-x-3">
+                                            <Avatar>
+                                                {user.avatarUrl ? (
+                                                    <AvatarImage src={user.avatarUrl} alt={user.name}/>
+                                                ) : (
+                                                    <AvatarFallback
+                                                        className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                                                        {user.initials}
+                                                    </AvatarFallback>
+                                                )}
+                                            </Avatar>
+                                            <div className="flex-1">
+                                                <div className="flex items-center">
+                                                    <span className="font-semibold">{user.name}</span>
+                                                    {user.isVerified && (
+                                                        <span className="ml-1 text-blue-500">
+                              <Shield className="h-4 w-4"/>
+                            </span>
+                                                    )}
+                                                    <span className="ml-2 text-gray-500 text-sm">@{user.username}</span>
+                                                    <span className="mx-1 text-gray-500">•</span>
+                                                    <span className="text-gray-500 text-sm">{post.timestamp}</span>
+                                                    <Button variant="ghost" size="sm" className="ml-auto text-gray-400">
+                                                        <MoreHorizontal className="h-4 w-4"/>
+                                                    </Button>
+                                                </div>
+                                                <div className="mt-1 whitespace-pre-line">
+                                                    {post.content}
+                                                </div>
+                                                {post.mediaUrl && (
+                                                    <div className="mt-3 rounded-lg overflow-hidden border">
+                                                        <img
+                                                            src={post.mediaUrl}
+                                                            alt="Post media"
+                                                            className="w-full"
+                                                        />
+                                                    </div>
+                                                )}
+                                                <div className="flex items-center justify-between mt-3">
+                                                    <Button variant="ghost" size="sm"
+                                                            className="text-gray-500 hover:text-red-500 hover:bg-red-50">
+                                                        <Heart className="h-4 w-4 mr-1"/>
+                                                        <span>{post.stats.likes}</span>
+                                                    </Button>
+                                                    <Button variant="ghost" size="sm"
+                                                            className="text-gray-500 hover:text-blue-500 hover:bg-blue-50">
+                                                        <MessageCircle className="h-4 w-4 mr-1"/>
+                                                        <span>{post.stats.comments}</span>
+                                                    </Button>
+                                                    <Button variant="ghost" size="sm"
+                                                            className="text-gray-500 hover:text-green-500 hover:bg-green-50">
+                                                        <Repeat2 className="h-4 w-4 mr-1"/>
+                                                        <span>{post.stats.reposts}</span>
+                                                    </Button>
+                                                    <Button variant="ghost" size="sm"
+                                                            className="text-gray-500 hover:text-blue-500 hover:bg-blue-50">
+                                                        <Share2 className="h-4 w-4"/>
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </TabsContent>
+
+                    <TabsContent value="media" className="flex-1 p-4 m-0">
+                        <div className="grid grid-cols-3 gap-2">
+                            {posts
+                                .filter(post => post.mediaUrl)
+                                .map((post) => (
+                                    <div key={post.id} className="aspect-square overflow-hidden rounded-md border">
+                                        <img
+                                            src={post.mediaUrl}
+                                            alt="Media"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                ))}
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="likes" className="flex-1 p-6 m-0">
+                        <div className="text-center text-gray-500">
+                            <Heart className="h-12 w-12 mx-auto mb-2 text-gray-300"/>
+                            <p className="text-lg">Content that {user.name} has liked will appear here</p>
+                        </div>
+                    </TabsContent>
+                </Tabs>
             </div>
-            {viewMode === "grid" ? (
-                <MediaGrid media={filteredMedia} />
-            ) : (
-                <MediaList media={filteredMedia} />
-            )}
+
+            {/* Right Sidebar */}
+            <div className="w-80 border-l p-4 hidden lg:block">
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-base mb-3">About</h3>
+                    <div className="space-y-2">
+                        {user.github && (
+                            <div className="flex items-center">
+                                <Github className="h-4 w-4 mr-2 text-gray-500"/>
+                                <a href={`https://${user.github}`} className="text-blue-500 hover:underline text-sm">
+                                    {user.github}
+                                </a>
+                            </div>
+                        )}
+                        {user.twitter && (
+                            <div className="flex items-center">
+                                <Twitter className="h-4 w-4 mr-2 text-gray-500"/>
+                                <a href={`https://${user.twitter}`} className="text-blue-500 hover:underline text-sm">
+                                    {user.twitter}
+                                </a>
+                            </div>
+                        )}
+                        <div className="flex items-center">
+                            <Mail className="h-4 w-4 mr-2 text-gray-500"/>
+                            <span className="text-sm">{user.contact}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-base mb-3">Featured Projects</h3>
+                    <div className="space-y-3">
+                        <Card className="overflow-hidden">
+                            <img src="https://picsum.photos/seed/avatar/320/120" alt="Project thumbnail"
+                                 className="w-full h-24 object-cover"/>
+                            <CardContent className="p-3">
+                                <h4 className="font-medium">React Power Hooks</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    A collection of performance-optimized React hooks for modern web applications
+                                </p>
+                                <div className="flex items-center mt-2">
+                                    <div className="flex text-yellow-400 text-xs">
+                                        ★★★★★
+                                    </div>
+                                    <span className="text-xs text-gray-500 ml-1">542 stars</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="overflow-hidden">
+                            <img src="https://picsum.photos/seed/avatar/320/120" alt="Project thumbnail"
+                                 className="w-full h-24 object-cover"/>
+                            <CardContent className="p-3">
+                                <h4 className="font-medium">TypeScript Academy</h4>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Open source learning resource for mastering TypeScript in modern frontend
+                                    development
+                                </p>
+                                <div className="flex items-center mt-2">
+                                    <div className="flex text-yellow-400 text-xs">
+                                        ★★★★★
+                                    </div>
+                                    <span className="text-xs text-gray-500 ml-1">328 stars</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
-
-const ProfileHeader = ({ profile }: { profile: ProfileData }) => (
-    <div className="flex flex-col md:flex-row gap-6">
-        <Avatar className="h-24 w-24 md:h-32 md:w-32">
-            <AvatarImage src={profile.avatar} alt={profile.name} />
-            <AvatarFallback><UserIcon className="h-12 w-12" /></AvatarFallback>
-        </Avatar>
-
-        <div className="flex flex-col flex-1 gap-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold">{profile.name}</h1>
-                    <p className="text-muted-foreground">@{profile.username}</p>
-                </div>
-                <div className="flex gap-2">
-                    <Button>Follow</Button>
-                    <Button variant="outline">Message</Button>
-                </div>
-            </div>
-
-            <div className="flex gap-4 text-sm">
-                <div><strong>{profile.mediaCount}</strong> posts</div>
-                <div><strong>{profile.followers.toLocaleString()}</strong> followers</div>
-                <div><strong>{profile.following.toLocaleString()}</strong> following</div>
-            </div>
-
-            <p className="text-sm">{profile.bio}</p>
-
-            <div className="flex gap-2 flex-wrap">
-                {profile.specialties.map(specialty => (
-                    <Badge key={specialty} variant="secondary">{specialty}</Badge>
-                ))}
-            </div>
-
-            <p className="text-sm text-muted-foreground flex items-center gap-1">
-                <span>📍</span> {profile.location}
-            </p>
-        </div>
-    </div>
-);
-
-const ProfileTabs = ({
-                         activeTab,
-                         setActiveTab,
-                         photoCount,
-                         videoCount
-                     }: {
-    activeTab: "grid" | "photos" | "videos";
-    setActiveTab: (tab: "grid" | "photos" | "videos") => void;
-    photoCount: number;
-    videoCount: number;
-}) => (
-    <Tabs defaultValue={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-        <TabsList className="grid grid-cols-3">
-            <TabsTrigger value="grid" className="flex items-center gap-2">
-                <GridIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">All</span>
-            </TabsTrigger>
-            <TabsTrigger value="photos" className="flex items-center gap-2">
-                <ImageIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">Photos</span>
-                <span className="text-xs text-muted-foreground">({photoCount})</span>
-            </TabsTrigger>
-            <TabsTrigger value="videos" className="flex items-center gap-2">
-                <PlayCircleIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">Videos</span>
-                <span className="text-xs text-muted-foreground">({videoCount})</span>
-            </TabsTrigger>
-        </TabsList>
-    </Tabs>
-);
-
-const ViewToggle = ({
-                        viewMode,
-                        setViewMode
-                    }: {
-    viewMode: "grid" | "list";
-    setViewMode: (mode: "grid" | "list") => void;
-}) => (
-    <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as "grid" | "list")}>
-        <ToggleGroupItem value="grid" aria-label="Grid view">
-            <GridIcon className="h-4 w-4" />
-        </ToggleGroupItem>
-        <ToggleGroupItem value="list" aria-label="List view">
-            <ListIcon className="h-4 w-4" />
-        </ToggleGroupItem>
-    </ToggleGroup>
-);
-
-const MediaGrid = ({ media }: { media: MediaItem[] }) => (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {media.map(item => (
-            <MediaCard key={item.id} item={item} />
-        ))}
-    </div>
-);
-
-const MediaList = ({ media }: { media: MediaItem[] }) => (
-    <div className="flex flex-col gap-4">
-        {media.map(item => (
-            <MediaListItem key={item.id} item={item} />
-        ))}
-    </div>
-);
-
-const MediaCard = ({ item }: { item: MediaItem }) => (
-    <Card className="overflow-hidden group">
-        <CardContent className="p-0 relative">
-            <div className="aspect-square relative overflow-hidden">
-                <img
-                    src={item.thumbnail || item.url}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                />
-                {item.type === "video" && (
-                    <div className="absolute top-2 right-2">
-                        <PlayCircleIcon className="h-6 w-6 text-white drop-shadow-md" />
-                    </div>
-                )}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors">
-                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity text-white">
-                        <h3 className="font-medium text-sm truncate">{item.title}</h3>
-                        <div className="flex gap-3 text-xs mt-1">
-                            <span className="flex items-center gap-1">
-                                <CameraIcon className="h-3 w-3" /> {item.likes}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <MessageCircleIcon className="h-3 w-3" /> {item.comments}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <Button variant="ghost" size="icon" className="h-8 w-8 bg-black/30 text-white hover:bg-black/50 hover:text-white">
-                    <BookmarkIcon className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 bg-black/30 text-white hover:bg-black/50 hover:text-white">
-                    <Share2Icon className="h-4 w-4" />
-                </Button>
-            </div>
-        </CardContent>
-    </Card>
-);
-
-const MediaListItem = ({ item }: { item: MediaItem }) => (
-    <Card className="overflow-hidden group">
-        <CardContent className="p-3">
-            <div className="flex flex-col sm:flex-row gap-4">
-                <div className="relative w-full sm:w-48 h-48 shrink-0">
-                    <img
-                        src={item.thumbnail || item.url}
-                        alt={item.title}
-                        className="w-full h-full object-cover rounded-md"
-                    />
-                    {item.type === "video" && (
-                        <div className="absolute top-2 right-2">
-                            <PlayCircleIcon className="h-6 w-6 text-white drop-shadow-md" />
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex flex-col flex-1">
-                    <div className="flex justify-between items-start">
-                        <h3 className="font-medium text-lg">{item.title}</h3>
-                        <div className="flex gap-1">
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <BookmarkIcon className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Share2Icon className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-
-                    {item.description && (
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{item.description}</p>
-                    )}
-
-                    <div className="mt-auto pt-4 flex items-center justify-between">
-                        <div className="flex gap-4 text-sm">
-                            <span className="flex items-center gap-1">
-                                <CameraIcon className="h-4 w-4" /> {item.likes}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <MessageCircleIcon className="h-4 w-4" /> {item.comments}
-                            </span>
-                        </div>
-                        <div className="text-xs text-muted-foreground flex items-center">
-                            <CalendarIcon className="h-3 w-3 mr-1" />
-                            {new Date(item.createdAt).toLocaleDateString()}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </CardContent>
-    </Card>
-);

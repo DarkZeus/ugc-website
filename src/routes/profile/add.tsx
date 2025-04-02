@@ -35,6 +35,7 @@ type CreatePostForm = {
 // Mock API function
 const createPost = async (formData: FormData): Promise<{ success: boolean; id: string }> => {
     // Simulate API call
+    console.log(formData);
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({

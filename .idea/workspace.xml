@@ -5,12 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9786420f-74c0-471d-ad4b-b75db7d6801b" name="Changes" comment="Update gitignore">
-      <change afterPath="$PROJECT_DIR$/src/components/SearchModal.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Sidebar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/feed.types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/social-feed-page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/posts.$postId.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/profile/notifications.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/feed.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/post.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routeTree.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routeTree.gen.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/__root.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/__root.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/feed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/feed.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/profile/add.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/profile/add.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/profile/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/profile/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +77,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1742918067815</updated>
-      <workItem from="1742918068859" duration="7724000" />
+      <workItem from="1742918068859" duration="16962000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -88,7 +95,31 @@
       <option name="project" value="LOCAL" />
       <updated>1742938666441</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Navbar revamp">
+      <option name="closed" value="true" />
+      <created>1742940790031</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1742940790031</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update gitignore">
+      <option name="closed" value="true" />
+      <created>1743613843420</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1743613843420</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Update gitignore">
+      <option name="closed" value="true" />
+      <created>1743613873355</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1743613873355</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,6 +137,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="Navbar revamp" />
     <MESSAGE value="Update gitignore" />
     <MESSAGE value="Update gitignore" />
     <option name="LAST_COMMIT_MESSAGE" value="Update gitignore" />

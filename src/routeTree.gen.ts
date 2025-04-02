@@ -14,8 +14,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as FeedImport } from './routes/feed'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileIndexImport } from './routes/profile/index'
+import { Route as ProfileNotificationsImport } from './routes/profile/notifications'
 import { Route as ProfileDashboardImport } from './routes/profile/dashboard'
 import { Route as ProfileAddImport } from './routes/profile/add'
+import { Route as PostsPostIdImport } from './routes/posts.$postId'
 import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
 
 // Create/Update Routes
@@ -38,6 +40,12 @@ const ProfileIndexRoute = ProfileIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProfileNotificationsRoute = ProfileNotificationsImport.update({
+  id: '/profile/notifications',
+  path: '/profile/notifications',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProfileDashboardRoute = ProfileDashboardImport.update({
   id: '/profile/dashboard',
   path: '/profile/dashboard',
@@ -47,6 +55,12 @@ const ProfileDashboardRoute = ProfileDashboardImport.update({
 const ProfileAddRoute = ProfileAddImport.update({
   id: '/profile/add',
   path: '/profile/add',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PostsPostIdRoute = PostsPostIdImport.update({
+  id: '/posts/$postId',
+  path: '/posts/$postId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryImport
       parentRoute: typeof rootRoute
     }
+    '/posts/$postId': {
+      id: '/posts/$postId'
+      path: '/posts/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof PostsPostIdImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/add': {
       id: '/profile/add'
       path: '/profile/add'
@@ -93,6 +114,13 @@ declare module '@tanstack/react-router' {
       path: '/profile/dashboard'
       fullPath: '/profile/dashboard'
       preLoaderRoute: typeof ProfileDashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/notifications': {
+      id: '/profile/notifications'
+      path: '/profile/notifications'
+      fullPath: '/profile/notifications'
+      preLoaderRoute: typeof ProfileNotificationsImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
@@ -111,8 +139,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/feed': typeof FeedRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/profile/add': typeof ProfileAddRoute
   '/profile/dashboard': typeof ProfileDashboardRoute
+  '/profile/notifications': typeof ProfileNotificationsRoute
   '/profile': typeof ProfileIndexRoute
 }
 
@@ -120,8 +150,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/feed': typeof FeedRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/profile/add': typeof ProfileAddRoute
   '/profile/dashboard': typeof ProfileDashboardRoute
+  '/profile/notifications': typeof ProfileNotificationsRoute
   '/profile': typeof ProfileIndexRoute
 }
 
@@ -130,8 +162,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/feed': typeof FeedRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/profile/add': typeof ProfileAddRoute
   '/profile/dashboard': typeof ProfileDashboardRoute
+  '/profile/notifications': typeof ProfileNotificationsRoute
   '/profile/': typeof ProfileIndexRoute
 }
 
@@ -141,24 +175,30 @@ export interface FileRouteTypes {
     | '/'
     | '/feed'
     | '/demo/tanstack-query'
+    | '/posts/$postId'
     | '/profile/add'
     | '/profile/dashboard'
+    | '/profile/notifications'
     | '/profile'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/feed'
     | '/demo/tanstack-query'
+    | '/posts/$postId'
     | '/profile/add'
     | '/profile/dashboard'
+    | '/profile/notifications'
     | '/profile'
   id:
     | '__root__'
     | '/'
     | '/feed'
     | '/demo/tanstack-query'
+    | '/posts/$postId'
     | '/profile/add'
     | '/profile/dashboard'
+    | '/profile/notifications'
     | '/profile/'
   fileRoutesById: FileRoutesById
 }
@@ -167,8 +207,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FeedRoute: typeof FeedRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  PostsPostIdRoute: typeof PostsPostIdRoute
   ProfileAddRoute: typeof ProfileAddRoute
   ProfileDashboardRoute: typeof ProfileDashboardRoute
+  ProfileNotificationsRoute: typeof ProfileNotificationsRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
 }
 
@@ -176,8 +218,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FeedRoute: FeedRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  PostsPostIdRoute: PostsPostIdRoute,
   ProfileAddRoute: ProfileAddRoute,
   ProfileDashboardRoute: ProfileDashboardRoute,
+  ProfileNotificationsRoute: ProfileNotificationsRoute,
   ProfileIndexRoute: ProfileIndexRoute,
 }
 
@@ -194,8 +238,10 @@ export const routeTree = rootRoute
         "/",
         "/feed",
         "/demo/tanstack-query",
+        "/posts/$postId",
         "/profile/add",
         "/profile/dashboard",
+        "/profile/notifications",
         "/profile/"
       ]
     },
@@ -208,11 +254,17 @@ export const routeTree = rootRoute
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
     },
+    "/posts/$postId": {
+      "filePath": "posts.$postId.tsx"
+    },
     "/profile/add": {
       "filePath": "profile/add.tsx"
     },
     "/profile/dashboard": {
       "filePath": "profile/dashboard.tsx"
+    },
+    "/profile/notifications": {
+      "filePath": "profile/notifications.tsx"
     },
     "/profile/": {
       "filePath": "profile/index.tsx"
