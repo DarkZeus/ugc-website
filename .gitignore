@@ -25,6 +25,7 @@ pnpm-debug.log*
 
 # editor directories and files
 .idea
+.idea/workspace.xml
 .vscode
 *.suo
 *.ntvs*
@@ -34,3 +35,6 @@ pnpm-debug.log*
 
 # typescript
 *.tsbuildinfo
+
+src/routeTree.gen.ts
+.idea/workspace.xml
