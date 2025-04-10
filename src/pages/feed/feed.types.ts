@@ -27,5 +27,5 @@ export type Post = {
         comments: number;
         reposts: number;
     };
-    topComments: PostComment[];
+    topComments?: PostComment[];
 };

@@ -1,4 +1,4 @@
-import type {Post} from "@/pages/feed.types.ts";
+import type {Post} from "@/pages/feed/feed.types.ts";
 
 export const createPost = async (postData: { content: string; mediaUrl?: string }): Promise<Post> => {
     // Simulate network delay

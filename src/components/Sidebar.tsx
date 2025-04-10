@@ -34,7 +34,7 @@ export const Sidebar = ({ onCreatePost, unreadNotifications = 0 }: SidebarProps)
     ];
 
     return (
-        <div className="w-64 border-r flex flex-col h-full">
+        <div className="w-64 flex flex-col">
             <div className="p-4 border-b flex items-center space-x-2">
                 <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
                     <Users className="h-5 w-5" />
@@ -42,7 +42,22 @@ export const Sidebar = ({ onCreatePost, unreadNotifications = 0 }: SidebarProps)
                 <span className="font-semibold">DevConnect</span>
             </div>
 
-            <nav className="mt-4 flex-1 px-3">
+            <div className="p-4 border-t">
+                <div className="flex items-center space-x-3">
+                    <Avatar>
+                        <AvatarFallback className="bg-purple-100 text-purple-500">
+                            ME
+                        </AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <p className="text-sm font-medium">Mike Edwards</p>
+                        <p className="text-xs text-gray-500">@mike_dev</p>
+                    </div>
+                    <MoreHorizontal className="h-4 w-4 ml-auto text-gray-500" />
+                </div>
+            </div>
+
+            <nav className="flex-1 px-3">
                 {navItems.map((item) => (
                     <div
                         key={item.path}
@@ -70,21 +85,6 @@ export const Sidebar = ({ onCreatePost, unreadNotifications = 0 }: SidebarProps)
                     </Button>
                 </div>
             </nav>
-
-            <div className="mt-auto p-4 border-t">
-                <div className="flex items-center space-x-3">
-                    <Avatar>
-                        <AvatarFallback className="bg-purple-100 text-purple-500">
-                            ME
-                        </AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <p className="text-sm font-medium">Mike Edwards</p>
-                        <p className="text-xs text-gray-500">@mike_dev</p>
-                    </div>
-                    <MoreHorizontal className="h-4 w-4 ml-auto text-gray-500" />
-                </div>
-            </div>
         </div>
     );
 };
